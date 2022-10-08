@@ -1,7 +1,9 @@
-package com.example.projetohowdy;
+package com.example.projetohowdy.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.projetohowdy.R;
 
 public class FormLogin extends AppCompatActivity {
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "612595145910",
+    "project_id": "howdy-cd4fd",
+    "storage_bucket": "howdy-cd4fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612595145910:android:0d2c52e74b4e9898351a17",
+        "android_client_info": {
+          "package_name": "com.example.projetohowdy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612595145910-4bihuu9ndf501nbp6if81h11bnrvfb55.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5c-JogTUjQ-j5Wq2K3lP5eRm9IaafX1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612595145910-4bihuu9ndf501nbp6if81h11bnrvfb55.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
