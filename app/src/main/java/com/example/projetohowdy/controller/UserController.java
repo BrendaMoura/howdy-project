@@ -63,4 +63,33 @@ public class UserController {
         return finalMessage;
     }
 
+    public String updateAccount(User user){
+        auth = FirebaseConfiguration.getFirebaseAuth();
+        String email = auth.getCurrentUser().getEmail();
+
+        DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
+        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                try{
+                    if( email != user.email){
+                        auth.getCurrentUser().updateEmail(user.email);
+                    }
+
+                    auth.getCurrentUser().updatePassword(user.password);
+                    finalMessage = "Sucesso ao alterar conta!";
+                }catch (Exception e){
+                    e.printStackTrace();
+                    finalMessage = "Erro ao alterar conta!";
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                finalMessage = "Erro ao alterar conta!";
+            }
+        });
+
+        return finalMessage;
+    }
 }

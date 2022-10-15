@@ -16,5 +16,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        User user = new User();
+        user.setName("Andrew");
+        user.setEmail("andrew@gmail.com");
+        user.setUser("andrew2001");
+        user.setPassword("andrew");
+
+        UserController userController = new UserController();
+        userController.updateAccount(user);
     }
 }
