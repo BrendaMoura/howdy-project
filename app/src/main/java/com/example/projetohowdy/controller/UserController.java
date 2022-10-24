@@ -20,13 +20,13 @@ public class UserController {
     private FirebaseAuth auth;
     private String finalMessage = "No response yet";
 
-    public String createUser (User user) {
+    public String createUser(User user) {
         auth = FirebaseConfiguration.getFirebaseAuth();
 
         auth.createUserWithEmailAndPassword(user.email.toLowerCase(), user.password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     String encryptedPassword = Encryption.encode64(user.getPassword());
                     user.setPassword(encryptedPassword);
 
@@ -43,14 +43,14 @@ public class UserController {
                             finalMessage = "Erro ao cadastrar!";
                         }
                     });
-                }else{
+                } else {
                     try {
                         throw task.getException();
-                    }catch (FirebaseAuthWeakPasswordException e){
+                    } catch (FirebaseAuthWeakPasswordException e) {
                         finalMessage = "Por favor, tente uma senha mais forte!";
-                    }catch (FirebaseAuthInvalidCredentialsException e){
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
                         finalMessage = "Email inválido!";
-                    }catch (FirebaseAuthUserCollisionException e){
+                    } catch (FirebaseAuthUserCollisionException e) {
                         finalMessage = "Conta já cadastrada!";
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -63,7 +63,7 @@ public class UserController {
         return finalMessage;
     }
 
-    public String updateAccount(User user){
+    public String updateAccount(User user) {
         auth = FirebaseConfiguration.getFirebaseAuth();
         String email = auth.getCurrentUser().getEmail();
 
@@ -71,14 +71,14 @@ public class UserController {
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                try{
-                    if( email != user.email){
+                try {
+                    if (email != user.email) {
                         auth.getCurrentUser().updateEmail(user.email);
                     }
 
                     auth.getCurrentUser().updatePassword(user.password);
                     finalMessage = "Sucesso ao alterar conta!";
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     finalMessage = "Erro ao alterar conta!";
                 }
@@ -89,6 +89,23 @@ public class UserController {
                 finalMessage = "Erro ao alterar conta!";
             }
         });
+
+        return finalMessage;
+    }
+
+    public String deleteUser() {
+        try {
+            auth = FirebaseConfiguration.getFirebaseAuth();
+
+            DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
+            documentReference.delete();
+
+            auth.getCurrentUser().delete();
+
+            finalMessage = "Conta excluída com sucesso!";
+        } catch (Exception e) {
+            finalMessage = "Erro ao excluir conta!";
+        }
 
         return finalMessage;
     }
