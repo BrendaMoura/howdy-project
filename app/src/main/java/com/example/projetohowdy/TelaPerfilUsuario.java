@@ -22,6 +22,7 @@ public class TelaPerfilUsuario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_perfil_usuario);
+        getSupportActionBar().hide();
 
         deslogar = findViewById(R.id.deslogar);
 

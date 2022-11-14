@@ -30,6 +30,7 @@ public class TelaBatePapo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_bate_papo);
+        getSupportActionBar().hide();
 
         content = findViewById(R.id.mensagem);
         enviar = findViewById(R.id.enviarmensagem);

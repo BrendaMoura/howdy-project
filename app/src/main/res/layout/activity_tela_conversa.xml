@@ -40,5 +40,27 @@
         app:layout_constraintStart_toStartOf="@+id/novaconversa"
         app:layout_constraintTop_toTopOf="@+id/novaconversa" />
 
+    <View
+        android:id="@+id/containerUser"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="300dp"
+        android:background="@drawable/container_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/perfil"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src='@drawable/ic_perfil'
+        tools:ignore="MissingConstraints"
+        app:layout_constraintBottom_toBottomOf="@id/containerUser"
+        app:layout_constraintEnd_toEndOf="@id/containerUser"
+        app:layout_constraintTop_toTopOf="@id/containerUser"
+        app:layout_constraintStart_toStartOf="@id/containerUser"
+        tools:layout_editor_absoluteY="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
