@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/containerUser" />
 
     <TextView
-        android:id="@+id/textNomeUser"
+        android:id="@+id/perfilUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/iconeUser" />
 
     <TextView
-        android:id="@+id/textEmailUser"
+        android:id="@+id/perfilEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -70,7 +70,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/iconeEmail"
-        app:layout_constraintTop_toBottomOf="@id/textNomeUser" />
+        app:layout_constraintTop_toBottomOf="@id/perfilUsuario" />
 
     <Button
         android:id="@+id/deslogar"
@@ -84,6 +84,6 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/textEmailUser"
+        app:layout_constraintTop_toBottomOf="@id/perfilEmail"
         tools:layout_editor_absoluteX="20dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
