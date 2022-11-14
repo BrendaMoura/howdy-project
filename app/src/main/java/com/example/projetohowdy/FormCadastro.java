@@ -25,6 +25,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.DocumentReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FormCadastro extends AppCompatActivity {
     TextView name, user, email, password;
     Button cadastrar;
@@ -36,7 +39,7 @@ public class FormCadastro extends AppCompatActivity {
         setContentView(R.layout.activity_form_cadastro);
 
         name = findViewById(R.id.cadastroname);
-        // user = findViewById(R.id.cadastrouser);
+        user = findViewById(R.id.cadastrouser);
         email = findViewById(R.id.cadastroemail);
         password = findViewById(R.id.cadastrosenha);
         cadastrar = findViewById(R.id.cadastrar);
@@ -48,27 +51,31 @@ public class FormCadastro extends AppCompatActivity {
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User newUser = new User("teste", name.getText().toString(), email.getText().toString(), password.getText().toString());
+                Map<String, String> newUser = new HashMap<>();
+                newUser.put("user", user.getText().toString());
+                newUser.put("name", name.getText().toString());
+                newUser.put("email", email.getText().toString());
+                newUser.put("password", password.getText().toString());
 
                 auth = FirebaseConfiguration.getFirebaseAuth();
-                auth.createUserWithEmailAndPassword(newUser.getEmail().toLowerCase(), newUser.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                auth.createUserWithEmailAndPassword(newUser.get("email").toLowerCase(), newUser.get("password")).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            String encryptedPassword = Encryption.encode64(newUser.getPassword());
-                            newUser.setPassword(encryptedPassword);
+                            String encryptedPassword = Encryption.encode64(newUser.get("password"));
+                            newUser.put("password", encryptedPassword);
 
                             DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
                             documentReference.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(FormCadastro.this, MainActivity.class);
+                                    Toast.makeText(FormCadastro.this, "Sucesso ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(FormCadastro.this, FormLogin.class);
                                     startActivity(intent);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    //Adicionar mensagem de falha
                                     Toast.makeText(FormCadastro.this, "Erro ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
                                 }
                             });

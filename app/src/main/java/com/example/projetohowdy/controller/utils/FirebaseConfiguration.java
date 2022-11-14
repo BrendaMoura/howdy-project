@@ -30,19 +30,6 @@ public class FirebaseConfiguration {
         return db;
     }
 
-    public boolean connectUser(String email, String senha) {
-        getFirebaseAuth().signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    result = true;
-                }
-            }
-        });
-
-        return result;
-    }
-
     public boolean disconnectUser() {
         try {
             auth.signOut();

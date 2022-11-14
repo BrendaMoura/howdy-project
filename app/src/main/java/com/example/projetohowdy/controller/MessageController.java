@@ -27,4 +27,20 @@ public class MessageController {
 
         return finalMessage;
     }
+
+    public String updateMessage(Message message){
+        Task<Void> documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Message").document(message.idMessage).set(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                // Alterada
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Falha
+            }
+        });
+
+        return finalMessage;
+    }
 }

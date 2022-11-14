@@ -1,7 +1,12 @@
 package com.example.projetohowdy.controller;
 
+import android.content.Intent;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
+import com.example.projetohowdy.FormLogin;
+import com.example.projetohowdy.TelaPerfilUsuario;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.model.User;
@@ -55,9 +60,20 @@ public class UserController {
             auth = FirebaseConfiguration.getFirebaseAuth();
 
             DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
-            documentReference.delete();
-
-            auth.getCurrentUser().delete();
+            documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+//                    auth.getCurrentUser().delete();
+//                    Toast.makeText(TelaPerfilUsuario.this, "Usuário excluído!", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(TelaPerfilUsuario.this, FormLogin.class);
+//                    startActivity(intent);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Toast.makeText(TelaPerfilUsuario.this, "Erro ao excluir usuário, tente novamente!", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             finalMessage = "Conta excluída com sucesso!";
         } catch (Exception e) {

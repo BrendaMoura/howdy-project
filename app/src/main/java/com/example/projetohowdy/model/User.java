@@ -1,10 +1,20 @@
 package com.example.projetohowdy.model;
 
 public class User {
+
+    public String idUSer;
     public String user;
     public String name;
     public String email;
     public String password;
+
+    public String getIdUSer() {
+        return idUSer;
+    }
+
+    public void setIdUSer(String idUSer) {
+        this.idUSer = idUSer;
+    }
 
     public String getUser() {
         return user;
@@ -38,7 +48,8 @@ public class User {
         this.password = password;
     }
 
-    public User(String user, String name, String email, String password) {
+    public User(String idUSer, String user, String name, String email, String password) {
+        this.idUSer = idUSer;
         this.user = user;
         this.name = name;
         this.email = email;
