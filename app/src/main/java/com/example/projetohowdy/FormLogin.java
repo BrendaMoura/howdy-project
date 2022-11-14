@@ -11,10 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
+import com.example.projetohowdy.controller.utils.Session;
+import com.example.projetohowdy.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class FormLogin extends AppCompatActivity {
     TextView email, senha, cadastro;
@@ -43,8 +47,17 @@ public class FormLogin extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(FormLogin.this, TelaConversa.class);
-                            startActivity(intent);
+                            FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(FirebaseConfiguration.getFirebaseAuth().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    // Guardar dados do usuario logado
+                                    User user = documentSnapshot.toObject(User.class);
+                                    user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
+                                    Session.user = user;
+                                    Intent intent = new Intent(FormLogin.this, TelaConversa.class);
+                                    startActivity(intent);
+                                }
+                            });
                         }else{
                             try {
                                 throw task.getException();

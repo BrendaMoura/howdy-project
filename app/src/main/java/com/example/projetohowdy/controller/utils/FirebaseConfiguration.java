@@ -11,7 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FirebaseConfiguration {
     private static FirebaseAuth auth;
     private static FirebaseFirestore db;
-    private static boolean result;
 
     // return FirebaseAuth instance
     // authentication
