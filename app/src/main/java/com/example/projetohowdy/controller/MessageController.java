@@ -11,6 +11,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class MessageController {
     private String finalMessage = "No response yet";
@@ -39,6 +42,20 @@ public class MessageController {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //Falha
+            }
+        });
+    }
+
+    public void findAllMessages(String idInbox){
+        FirebaseConfiguration.getFirebaseFirestore().collection("Message").whereEqualTo("idInbox", idInbox).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<Message> messages = queryDocumentSnapshots.toObjects(Message.class);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Falha
             }
         });
     }
