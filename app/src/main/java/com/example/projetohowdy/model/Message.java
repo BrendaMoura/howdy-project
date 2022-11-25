@@ -1,12 +1,14 @@
 package com.example.projetohowdy.model;
 
+import java.util.Date;
+
 public class Message {
     public String idMessage;
     public String idInbox;
     public String idSender;
     public String content;
-    public String createdAt;
-    public String updatedAt;
+    public Date createdAt;
+    public Date updatedAt;
     public boolean deletedBySender;
     public boolean deletedByReceiver;
 
@@ -42,19 +44,19 @@ public class Message {
         this.content = content;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -74,7 +76,7 @@ public class Message {
         this.deletedByReceiver = deletedByReceiver;
     }
 
-    public Message(String idMessage, String idInbox, String idSender, String content, String createdAt, String updatedAt, boolean deletedBySender, boolean deletedByReceiver) {
+    public Message(String idMessage, String idInbox, String idSender, String content, Date createdAt, Date updatedAt, boolean deletedBySender, boolean deletedByReceiver) {
         this.idMessage = idMessage;
         this.idInbox = idInbox;
         this.idSender = idSender;
@@ -83,5 +85,8 @@ public class Message {
         this.updatedAt = updatedAt;
         this.deletedBySender = deletedBySender;
         this.deletedByReceiver = deletedByReceiver;
+    }
+
+    public Message() {
     }
 }
