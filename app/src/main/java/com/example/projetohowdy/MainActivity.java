@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 Date timestamp = new Date(System.currentTimeMillis());
 
                 if(MessageController.getForwardMessage() != null && usuario.getText().toString().equals(Session.user.user)){
-                    System.out.println("Teste 333");
                     MessageController.getForwardMessage().setCreatedAt(timestamp);
 
                     MessageController.getForwardMessage().setIdInbox(InboxController.getChatPessoal().getIdInbox());
@@ -99,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
                             lastMessage.put("idLastMessage", documentReference.getId());
                             FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
 
+                            InboxController.setInbox(InboxController.getChatPessoal());
+                            InboxController.setReceiver(Session.user);
                             MessageController.setForwardMessage(null);
+
                             Intent intent = new Intent(MainActivity.this, TelaBatePapo.class);
                             startActivity(intent);
                             finish();
@@ -134,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         List<Inbox> inboxes = queryDocumentSnapshots.toObjects(Inbox.class);
                                         if(inboxes.isEmpty() && MessageController.getForwardMessage() != null){
-                                            System.out.println("Teste 222");
                                             Map<String, Participants> participants = new HashMap<>();
                                             Participants receiver = new Participants(task.getResult().getDocuments().get(0).getId(), 1L, false);
                                             Participants sender = new Participants(id, 0L, false);
@@ -147,11 +148,21 @@ public class MainActivity extends AppCompatActivity {
                                             FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").add(inbox).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
                                                 public void onSuccess(DocumentReference documentReference) {
+
                                                     MessageController.getForwardMessage().setIdInbox(documentReference.getId());
+
                                                     FirebaseConfiguration.getFirebaseFirestore().collection("Message").add(MessageController.getForwardMessage()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
+                                                        public void onSuccess(DocumentReference documentReference2) {
                                                             MessageController.setForwardMessage(null);
+
+                                                            Map<String, String> lastMessage = new HashMap<>();
+                                                            lastMessage.put("idLastMessage", documentReference2.getId());
+
+                                                            InboxController.setInbox(new Inbox(documentReference.getId(), documentReference2.getId(), inbox));
+
+                                                            FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
+
                                                             Toast.makeText(MainActivity.this, "Mensagem encaminhada com sucesso!", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
@@ -160,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         else if(!inboxes.isEmpty()){
                                             if(MessageController.getForwardMessage() != null){
-                                                System.out.println("Teste 111");
                                                 MessageController.getForwardMessage().setIdInbox(queryDocumentSnapshots.getDocuments().get(0).getId());
                                                 FirebaseConfiguration.getFirebaseFirestore().collection("Message").add(MessageController.getForwardMessage()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
@@ -168,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
                                                         Map<String, String> lastMessage = new HashMap<>();
                                                         lastMessage.put("idLastMessage", documentReference.getId());
                                                         FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
+
                                                         MessageController.setForwardMessage(null);
+
                                                         Toast.makeText(MainActivity.this, "Mensagem encaminhada com sucesso!", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {

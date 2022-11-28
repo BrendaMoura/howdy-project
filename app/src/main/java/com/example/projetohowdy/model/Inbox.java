@@ -7,6 +7,8 @@ public class Inbox {
     public String idLastMessage;
     public Map<String, Participants> participants;
 
+
+
     public String getIdInbox() {
         return idInbox;
     }
