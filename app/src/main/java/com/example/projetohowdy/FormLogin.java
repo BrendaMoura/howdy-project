@@ -54,6 +54,7 @@ public class FormLogin extends AppCompatActivity {
                                     user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
                                     Session.user = user;
                                     Intent intent = new Intent(FormLogin.this, TelaConversa.class);
+                                    //Intent intent = new Intent(FormLogin.this, Image_Profile.class);
                                     startActivity(intent);
                                     finish();
                                 }

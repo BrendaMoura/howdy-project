@@ -1,19 +1,15 @@
 package com.example.projetohowdy;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.projetohowdy.controller.InboxController;
-import com.example.projetohowdy.controller.UserController;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.model.Participants;
@@ -29,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.DocumentReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -86,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(MessageController.getForwardMessage() != null && usuario.getText().toString().equals(Session.user.user)){
                     MessageController.getForwardMessage().setCreatedAt(timestamp);
-
                     MessageController.getForwardMessage().setIdInbox(InboxController.getChatPessoal().getIdInbox());
+                    MessageController.getForwardMessage().setIdSender(id);
+                    MessageController.getForwardMessage().setIdMessage("");
                     FirebaseConfiguration.getFirebaseFirestore().collection("Message").add(MessageController.getForwardMessage()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Map<String, String> lastMessage = new HashMap<>();
                             lastMessage.put("idLastMessage", documentReference.getId());
+
                             FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
 
                             InboxController.setInbox(InboxController.getChatPessoal());
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                                             Participants receiver = new Participants(task.getResult().getDocuments().get(0).getId(), 1L, false);
                                             Participants sender = new Participants(id, 0L, false);
                                             participants.put(task.getResult().getDocuments().get(0).getId(), receiver);
-                                            participants.put(FirebaseConfiguration.getFirebaseAuth().getUid(), sender);
+                                            participants.put(id, sender);
 
                                             Map inbox = new HashMap<>();
                                             inbox.put("participants", participants);
@@ -149,7 +151,10 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(DocumentReference documentReference) {
 
+                                                    MessageController.getForwardMessage().setCreatedAt(timestamp);
                                                     MessageController.getForwardMessage().setIdInbox(documentReference.getId());
+                                                    MessageController.getForwardMessage().setIdSender(id);
+                                                    MessageController.getForwardMessage().setIdMessage("");
 
                                                     FirebaseConfiguration.getFirebaseFirestore().collection("Message").add(MessageController.getForwardMessage()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
@@ -164,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
                                                             FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
 
                                                             Toast.makeText(MainActivity.this, "Mensagem encaminhada com sucesso!", Toast.LENGTH_SHORT).show();
+
+                                                            Intent intent = new Intent(MainActivity.this, TelaBatePapo.class);
+                                                            startActivity(intent);
+                                                            finish();
                                                         }
                                                     });
                                                 }
@@ -171,7 +180,12 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         else if(!inboxes.isEmpty()){
                                             if(MessageController.getForwardMessage() != null){
+
+                                                MessageController.getForwardMessage().setCreatedAt(timestamp);
                                                 MessageController.getForwardMessage().setIdInbox(queryDocumentSnapshots.getDocuments().get(0).getId());
+                                                MessageController.getForwardMessage().setIdSender(id);
+                                                MessageController.getForwardMessage().setIdMessage("");
+
                                                 FirebaseConfiguration.getFirebaseFirestore().collection("Message").add(MessageController.getForwardMessage()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
@@ -181,7 +195,14 @@ public class MainActivity extends AppCompatActivity {
 
                                                         MessageController.setForwardMessage(null);
 
+                                                        InboxController.setInbox(inboxes.get(0));
+                                                        InboxController.setIdInbox(queryDocumentSnapshots.getDocuments().get(0).getId());
+
                                                         Toast.makeText(MainActivity.this, "Mensagem encaminhada com sucesso!", Toast.LENGTH_SHORT).show();
+
+                                                        Intent intent = new Intent(MainActivity.this, TelaBatePapo.class);
+                                                        startActivity(intent);
+                                                        finish();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
@@ -198,10 +219,11 @@ public class MainActivity extends AppCompatActivity {
                                         else{
                                             InboxController.setInbox(null);
                                         }
-
                                         Intent intent = new Intent(MainActivity.this, TelaBatePapo.class);
                                         startActivity(intent);
                                         finish();
+
+
                                     }
                                 });
 
