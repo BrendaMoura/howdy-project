@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/editar_msg"
+        android:title="Editar" />
+
+    <item
+        android:id="@+id/deletar_msg"
+        android:title="Deletar" />
+
+    <item
+        android:id="@+id/encaminhar_msg"
+        android:title="Encaminhar" />
+</menu>

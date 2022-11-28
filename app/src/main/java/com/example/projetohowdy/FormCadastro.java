@@ -1,18 +1,22 @@
 package com.example.projetohowdy;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projetohowdy.controller.InboxController;
 import com.example.projetohowdy.controller.UserController;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
+import com.example.projetohowdy.model.Participants;
 import com.example.projetohowdy.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -71,9 +75,22 @@ public class FormCadastro extends AppCompatActivity {
                             documentReference.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(FormCadastro.this, "Sucesso ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(FormCadastro.this, FormLogin.class);
-                                    startActivity(intent);
+                                    Map<String, Participants> participants = new HashMap<>();
+                                    Participants sender = new Participants(auth.getCurrentUser().getUid(), 0L, false);
+                                    participants.put(FirebaseConfiguration.getFirebaseAuth().getUid(), sender);
+
+                                    Map inbox = new HashMap<>();
+                                    inbox.put("participants", participants);
+
+                                    FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").add(inbox).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Toast.makeText(FormCadastro.this, "Sucesso ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(FormCadastro.this, FormLogin.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

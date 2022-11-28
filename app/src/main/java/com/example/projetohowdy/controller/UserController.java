@@ -26,9 +26,8 @@ import java.util.List;
 
 public class UserController {
     private FirebaseAuth auth;
-    private String finalMessage = "No response yet";
 
-    public String updateAccount(User user) {
+    public void updateAccount(User user) {
         auth = FirebaseConfiguration.getFirebaseAuth();
         String email = auth.getCurrentUser().getEmail();
 
@@ -42,48 +41,28 @@ public class UserController {
                     }
 
                     auth.getCurrentUser().updatePassword(user.password);
-                    finalMessage = "Sucesso ao alterar conta!";
                 } catch (Exception e) {
                     e.printStackTrace();
-                    finalMessage = "Erro ao alterar conta!";
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                finalMessage = "Erro ao alterar conta!";
+                //
             }
         });
-
-        return finalMessage;
     }
 
-    public String deleteUser() {
+    public void deleteUser() {
         try {
             auth = FirebaseConfiguration.getFirebaseAuth();
 
             DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
-            documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-//                    auth.getCurrentUser().delete();
-//                    Toast.makeText(TelaPerfilUsuario.this, "Usuário excluído!", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(TelaPerfilUsuario.this, FormLogin.class);
-//                    startActivity(intent);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Toast.makeText(TelaPerfilUsuario.this, "Erro ao excluir usuário, tente novamente!", Toast.LENGTH_SHORT).show();
-                }
-            });
+            documentReference.delete();
 
-            finalMessage = "Conta excluída com sucesso!";
         } catch (Exception e) {
-            finalMessage = "Erro ao excluir conta!";
+            //
         }
-
-        return finalMessage;
     }
 
     public void blockUser(String id){
@@ -92,17 +71,7 @@ public class UserController {
         if(!updatedBlockedPeople.contains(id)){
             updatedBlockedPeople.add(id);
             DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
-            documentReference.update("blockedPeople", updatedBlockedPeople).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    // usuario bloqueado
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Erro
-                }
-            });
+            documentReference.update("blockedPeople", updatedBlockedPeople);
         }else{
             //usuário já bloqueado
         }
@@ -113,17 +82,7 @@ public class UserController {
         if(updatedBlockedPeople.contains(id)){
             updatedBlockedPeople.remove(id);
             DocumentReference documentReference = FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(auth.getCurrentUser().getUid());
-            documentReference.update("blockedPeople", updatedBlockedPeople).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    // usuario desbloqueado
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Erro
-                }
-            });
+            documentReference.update("blockedPeople", updatedBlockedPeople);
         }else{
             //usuário já bloqueado
         }

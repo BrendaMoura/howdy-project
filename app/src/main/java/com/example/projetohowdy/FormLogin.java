@@ -50,12 +50,12 @@ public class FormLogin extends AppCompatActivity {
                             FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(FirebaseConfiguration.getFirebaseAuth().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    // Guardar dados do usuario logado
                                     User user = documentSnapshot.toObject(User.class);
                                     user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
                                     Session.user = user;
                                     Intent intent = new Intent(FormLogin.this, TelaConversa.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             });
                         }else{

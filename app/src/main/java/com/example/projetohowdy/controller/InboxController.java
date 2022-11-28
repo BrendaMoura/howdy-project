@@ -15,9 +15,26 @@ import java.util.List;
 
 public class InboxController {
     private FirebaseAuth auth;
-    private String finalMessage = "No response yet";
     private static User receiver;
     private static Inbox inbox;
+    private static List<Inbox> inboxes;
+    private static Inbox chatPessoal;
+
+    public static Inbox getChatPessoal() {
+        return chatPessoal;
+    }
+
+    public static void setChatPessoal(Inbox chatPessoal) {
+        InboxController.chatPessoal = chatPessoal;
+    }
+
+    public static List<Inbox> getInboxes() {
+        return inboxes;
+    }
+
+    public static void setInboxes(List<Inbox> inboxes) {
+        InboxController.inboxes = inboxes;
+    }
 
     public static User getReceiver() {
         return receiver;
@@ -39,20 +56,9 @@ public class InboxController {
         InboxController.inbox.setIdInbox(id);
     }
 
-    public String deleteInbox(String idInbox){
-        FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(idInbox).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                finalMessage = "Inbox excluída com sucesso!";
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                finalMessage = "Falha ao excluir inbox!";
-            }
-        });
+    public void deleteInbox(String idInbox){
+        FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(idInbox).delete();
 
-        return finalMessage;
     }
 
     public void pinInbox(String id){
