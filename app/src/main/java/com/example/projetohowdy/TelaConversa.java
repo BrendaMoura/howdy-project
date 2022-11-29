@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -123,6 +125,8 @@ public class TelaConversa extends AppCompatActivity {
             String idReceiver = "";
             TextView name = viewHolder.itemView.findViewById(R.id.nameInboxUser);
             TextView lastMessage = viewHolder.itemView.findViewById(R.id.last_msg);
+            ImageView profilePhoto = viewHolder.itemView.findViewById(R.id.img_user_inbox);
+            profilePhoto.setImageResource(R.drawable.ic_no_picture);
 
             if(inbox.getParticipants().size() == 1){
                 idReceiver = id;
