@@ -43,33 +43,35 @@ public class FormLogin extends AppCompatActivity {
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseConfiguration.getFirebaseAuth().signInWithEmailAndPassword(email.getText().toString(), senha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(FirebaseConfiguration.getFirebaseAuth().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    User user = documentSnapshot.toObject(User.class);
-                                    user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
-                                    Session.user = user;
-                                    Intent intent = new Intent(FormLogin.this, TelaConversa.class);
-                                    //Intent intent = new Intent(FormLogin.this, Image_Profile.class);
-                                    startActivity(intent);
-                                    finish();
+                if(!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty()){
+                    FirebaseConfiguration.getFirebaseAuth().signInWithEmailAndPassword(email.getText().toString(), senha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(FirebaseConfiguration.getFirebaseAuth().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        User user = documentSnapshot.toObject(User.class);
+                                        user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
+                                        Session.user = user;
+                                        Intent intent = new Intent(FormLogin.this, TelaConversa.class);
+                                        //Intent intent = new Intent(FormLogin.this, Image_Profile.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                            }else{
+                                try {
+                                    throw task.getException();
+                                }catch (FirebaseAuthInvalidCredentialsException e){
+                                    Toast.makeText(FormLogin.this, "E-mail ou senha incorretos, tente novamente!", Toast.LENGTH_SHORT).show();
+                                }catch (Exception e){
+                                    Toast.makeText(FormLogin.this, "Falha ao logar, tente novamente!", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                        }else{
-                            try {
-                                throw task.getException();
-                            }catch (FirebaseAuthInvalidCredentialsException e){
-                                Toast.makeText(FormLogin.this, "E-mail ou senha incorretos, tente novamente!", Toast.LENGTH_SHORT).show();
-                            }catch (Exception e){
-                                Toast.makeText(FormLogin.this, "Falha ao logar, tente novamente!", Toast.LENGTH_SHORT).show();
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 
