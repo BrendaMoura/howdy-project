@@ -149,7 +149,9 @@ public class TelaConversa extends AppCompatActivity {
                         FirebaseConfiguration.getFirebaseFirestore().collection("Message").document(inbox.getIdLastMessage()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                lastMessage.setText(value.getString("content"));
+                                if(value != null){
+                                    lastMessage.setText(value.getString("content"));
+                                }
                             }
                         });
                     }

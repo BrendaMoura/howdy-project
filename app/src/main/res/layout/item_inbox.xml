@@ -16,7 +16,6 @@
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
@@ -38,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
+            android:textColor="@color/black"
             android:textAlignment="viewStart"
             android:textStyle="bold" />
 
@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nenhuma mensagem enviada"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
