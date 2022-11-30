@@ -19,6 +19,7 @@
         android:ems="10"
         android:hint="Mensagem"
         android:inputType="textPersonName"
+        android:textColor="@color/black"
         android:paddingLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/enviarmensagem"
