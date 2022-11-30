@@ -241,7 +241,7 @@ public class TelaBatePapo extends AppCompatActivity {
                             if (menuItem.getTitle().equals("Editar")) {
                                 AlertDialog dialog;
                                 EditText editText;
-                                
+
                                 dialog = new AlertDialog.Builder(viewHolder.itemView.getContext()).create();
                                 editText = new EditText(viewHolder.itemView.getContext());
 

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.projetohowdy.controller.InboxController;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.model.Participants;
@@ -60,12 +58,12 @@ public class FormCadastro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_cadastro);
 
-        name = findViewById(R.id.cadastroname);
-        user = findViewById(R.id.cadastrouser);
-        email = findViewById(R.id.cadastroemail);
-        password = findViewById(R.id.cadastrosenha);
+        name = findViewById(R.id.perfilNome);
+        user = findViewById(R.id.perfilUsuario);
+        email = findViewById(R.id.perfilEmail);
+        password = findViewById(R.id.perfilSenha);
         cadastrar = findViewById(R.id.cadastrar);
-        photo = findViewById(R.id.imagemAvatar);
+        photo = findViewById(R.id.profileScreenPhoto);
 
         storage = FirebaseStorage.getInstance();
 

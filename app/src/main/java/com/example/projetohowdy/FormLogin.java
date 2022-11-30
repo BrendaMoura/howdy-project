@@ -30,8 +30,8 @@ public class FormLogin extends AppCompatActivity {
         setContentView(R.layout.activity_form_login);
         getSupportActionBar().hide();
 
-        email = findViewById(R.id.cadastroemail);
-        senha = findViewById(R.id.cadastrosenha);
+        email = findViewById(R.id.perfilEmail);
+        senha = findViewById(R.id.perfilSenha);
         entrar = findViewById(R.id.login);
         cadastro = findViewById(R.id.cadastro);
 

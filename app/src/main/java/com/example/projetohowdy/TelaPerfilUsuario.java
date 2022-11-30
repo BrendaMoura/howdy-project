@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.controller.utils.Session;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +32,7 @@ import java.io.IOException;
 
 public class TelaPerfilUsuario extends AppCompatActivity {
     View deslogar;
-    TextView username, email;
+    TextView name, username, email, password;
     ImageView profile;
 
     FirebaseStorage storage;
@@ -42,14 +43,18 @@ public class TelaPerfilUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_tela_perfil_usuario);
 
         deslogar = findViewById(R.id.deslogar);
+        name = findViewById(R.id.perfilNome);
         username = findViewById(R.id.perfilUsuario);
         email = findViewById(R.id.perfilEmail);
+        password = findViewById(R.id.perfilSenha);
         profile = findViewById(R.id.profileScreenPhoto);
 
         storage = FirebaseStorage.getInstance();
 
+        name.setText(Session.user.name);
         username.setText(Session.user.user);
         email.setText(Session.user.email);
+        password.setText(Encryption.decode64(Session.user.password));
 
         prepararActionBar();
         getProfilePhoto();
