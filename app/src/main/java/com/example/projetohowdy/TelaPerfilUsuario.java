@@ -5,11 +5,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,10 +22,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class TelaPerfilUsuario extends AppCompatActivity {
     View deslogar;
     TextView username, email;
+    ImageView profile;
+
+    FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +44,40 @@ public class TelaPerfilUsuario extends AppCompatActivity {
         deslogar = findViewById(R.id.deslogar);
         username = findViewById(R.id.perfilUsuario);
         email = findViewById(R.id.perfilEmail);
+        profile = findViewById(R.id.profileScreenPhoto);
+
+        storage = FirebaseStorage.getInstance();
 
         username.setText(Session.user.user);
         email.setText(Session.user.email);
 
         prepararActionBar();
+        getProfilePhoto();
         acao();
+    }
+
+    public void getProfilePhoto(){
+        StorageReference reference = storage.getReference("upload/images/" + Session.user.getIdUSer() + ".jpg");
+
+        try {
+            File localfile = File.createTempFile("tempfile", ".jpg");
+            reference.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    if(taskSnapshot != null){
+                        Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                        profile.setImageBitmap(bitmap);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void prepararActionBar(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.blue2)));
 
         actionBar.setTitle("Perfil do Usuário");
     }

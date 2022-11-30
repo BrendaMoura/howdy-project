@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     public void prepararActionBar(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.blue2)));
 
         actionBar.setTitle("Pesquisar usuário");
     }

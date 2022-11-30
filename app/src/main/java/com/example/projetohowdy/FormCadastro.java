@@ -1,15 +1,26 @@
 package com.example.projetohowdy;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projetohowdy.controller.InboxController;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.model.Participants;
@@ -24,35 +35,85 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FormCadastro extends AppCompatActivity {
     TextView name, user, email, password;
     Button cadastrar;
+    ImageView photo;
+
     private FirebaseAuth auth;
+    private FirebaseStorage storage;
+
+    ActivityResultLauncher<String> mTakePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_cadastro);
-        getSupportActionBar().hide();
 
         name = findViewById(R.id.cadastroname);
         user = findViewById(R.id.cadastrouser);
         email = findViewById(R.id.cadastroemail);
         password = findViewById(R.id.cadastrosenha);
         cadastrar = findViewById(R.id.cadastrar);
+        photo = findViewById(R.id.imagemAvatar);
 
+        storage = FirebaseStorage.getInstance();
+
+        mTakePhoto = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        photo.setImageURI(result);
+                    }
+                }
+        );
+
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTakePhoto.launch("image/*");
+            }
+        });
+
+        prepararActionBar();
         acao();
+    }
+
+    public void prepararActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar.setTitle("Cadastro");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(FormCadastro.this, FormLogin.class);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void acao(){
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!name.getText().toString().isEmpty() && !user.getText().toString().isEmpty() && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()){
+                if(!name.getText().toString().isEmpty() && !user.getText().toString().isEmpty() && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty() && photo.getDrawable() != null){
                     User newUser = new User(user.getText().toString(),
                             name.getText().toString(),
                             email.getText().toString(),
@@ -80,10 +141,24 @@ public class FormCadastro extends AppCompatActivity {
                                         FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").add(inbox).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
-                                                Toast.makeText(FormCadastro.this, "Sucesso ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(FormCadastro.this, FormLogin.class);
-                                                startActivity(intent);
-                                                finish();
+                                                StorageReference reference = storage.getReference().child("upload").child("images");
+                                                StorageReference nameImage = reference.child(auth.getCurrentUser().getUid() + ".jpg");
+
+                                                BitmapDrawable drawable = (BitmapDrawable) photo.getDrawable();
+                                                Bitmap bitmap = drawable.getBitmap();
+                                                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+                                                UploadTask uploadTask = nameImage.putBytes(bytes.toByteArray());
+                                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                        Toast.makeText(FormCadastro.this, "Sucesso ao cadastrar novo usuário!", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(FormCadastro.this, FormLogin.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
                                             }
                                         });
                                     }

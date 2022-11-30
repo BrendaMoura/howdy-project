@@ -33,4 +33,14 @@
         <item name="textAllCaps">false</item>
         <item name="android:background">@drawable/button</item>
     </style>
+
+    <style name="ActionBarHowdy" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/blue2</item>
+        <item name="titleTextStyle">@style/ActionBarTitle</item>
+    </style>
+
+    <style name="ActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

@@ -99,6 +99,5 @@ public class Image_Profile extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -11,12 +11,11 @@
         android:id="@+id/imagemAvatar"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:src="@drawable/images"
+        android:src="@drawable/ic_picture_default"
         android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <View
         android:id="@+id/containerComponents"
@@ -26,6 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
     <EditText
         android:id="@+id/cadastroname"
         style="@style/Edit_Text"

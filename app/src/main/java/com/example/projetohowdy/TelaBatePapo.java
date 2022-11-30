@@ -73,7 +73,6 @@ public class TelaBatePapo extends AppCompatActivity {
     public void prepararActionBar(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.blue2)));
 
         actionBar.setTitle(InboxController.getReceiver().getName());
     }
@@ -141,7 +140,6 @@ public class TelaBatePapo extends AppCompatActivity {
                                 Map<String, String> lastMessage = new HashMap<>();
                                 lastMessage.put("idLastMessage", documentReference.getId());
                                 FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(InboxController.getInbox().getIdInbox()).set(lastMessage, SetOptions.merge());
-                                Toast.makeText(TelaBatePapo.this, "Mensagem enviada com sucesso!", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -184,7 +182,6 @@ public class TelaBatePapo extends AppCompatActivity {
 
                                         FirebaseConfiguration.getFirebaseFirestore().collection("Inbox").document(documentReference.getId()).set(lastMessage, SetOptions.merge());
 
-                                        Toast.makeText(TelaBatePapo.this, "Mensagem enviada com sucesso!", Toast.LENGTH_SHORT).show();
                                         getMessages();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -263,7 +260,6 @@ public class TelaBatePapo extends AppCompatActivity {
                                             public void onSuccess(Void unused) {
 
                                                 txtMessage.setText(message.getContent());
-                                                Toast.makeText(TelaBatePapo.this, "Mensagem alterada com sucesso!", Toast.LENGTH_SHORT).show();
                                                 dialog.cancel();
                                                 popupMenu.dismiss();
                                             }
@@ -296,7 +292,6 @@ public class TelaBatePapo extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         txtMessage.setText("Essa mensagem foi apagada");
-                                        Toast.makeText(TelaBatePapo.this, "Mensagem apagada com sucesso!", Toast.LENGTH_SHORT).show();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override

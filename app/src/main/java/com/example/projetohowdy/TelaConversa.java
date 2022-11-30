@@ -2,6 +2,7 @@ package com.example.projetohowdy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,20 +34,26 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class TelaConversa extends AppCompatActivity {
     String id;
     FloatingActionButton novaconversa;
-    ImageView image_tela_perfil;
     RecyclerView rv;
+
+    FirebaseStorage storage;
 
     GroupAdapter adapter;
 
@@ -51,20 +61,47 @@ public class TelaConversa extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_conversa);
-        getSupportActionBar().hide();
 
         id = FirebaseConfiguration.getFirebaseAuth().getCurrentUser().getUid();
 
+        storage = FirebaseStorage.getInstance();
+
         novaconversa = findViewById(R.id.novaconversa);
-        image_tela_perfil = findViewById(R.id.perfil);
         rv = findViewById(R.id.recycle_inbox);
 
         adapter = new GroupAdapter<>();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
+        prepararActionBar();
         getInboxUsers();
         acao();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public void prepararActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setTitle("Howdy");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.user_profile:
+                Intent intent = new Intent(TelaConversa.this, TelaPerfilUsuario.class);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void getInboxUsers(){
@@ -101,15 +138,6 @@ public class TelaConversa extends AppCompatActivity {
                 finish();
             }
         });
-
-        image_tela_perfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TelaConversa.this, TelaPerfilUsuario.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     private class InboxItem extends Item<GroupieViewHolder>{
@@ -126,7 +154,6 @@ public class TelaConversa extends AppCompatActivity {
             TextView name = viewHolder.itemView.findViewById(R.id.nameInboxUser);
             TextView lastMessage = viewHolder.itemView.findViewById(R.id.last_msg);
             ImageView profilePhoto = viewHolder.itemView.findViewById(R.id.img_user_inbox);
-            profilePhoto.setImageResource(R.drawable.ic_no_picture);
 
             if(inbox.getParticipants().size() == 1){
                 idReceiver = id;
@@ -137,6 +164,25 @@ public class TelaConversa extends AppCompatActivity {
                         break;
                     }
                 }
+            }
+
+            profilePhoto.setImageResource(R.drawable.ic_no_picture);
+
+            StorageReference reference = storage.getReference("upload/images/" + idReceiver + ".jpg");
+
+            try {
+                File localfile = File.createTempFile("tempfile", ".jpg");
+                reference.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        if(taskSnapshot != null){
+                            Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                            profilePhoto.setImageBitmap(bitmap);
+                        }
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(idReceiver).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
