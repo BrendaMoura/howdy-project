@@ -53,6 +53,8 @@ public class FormCadastro extends AppCompatActivity {
 
     ActivityResultLauncher<String> mTakePhoto;
 
+    boolean imagemSelecionada = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,10 @@ public class FormCadastro extends AppCompatActivity {
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri result) {
-                        photo.setImageURI(result);
+                        if(result != null){
+                            photo.setImageURI(result);
+                            imagemSelecionada = true;
+                        }
                     }
                 }
         );
@@ -113,7 +118,7 @@ public class FormCadastro extends AppCompatActivity {
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!name.getText().toString().isEmpty() && !user.getText().toString().isEmpty() && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty() && photo.getDrawable() != null){
+                if(!name.getText().toString().isEmpty() && !user.getText().toString().isEmpty() && !email.getText().toString().isEmpty() && !password.getText().toString().isEmpty() && imagemSelecionada == true){
                     User newUser = new User(user.getText().toString(),
                             name.getText().toString(),
                             email.getText().toString(),
@@ -184,6 +189,8 @@ public class FormCadastro extends AppCompatActivity {
                             }
                         }
                     });
+                }else{
+                    Toast.makeText(FormCadastro.this, "Por favor, preencha todos os campos, inclusive selecione a foto de perfil", Toast.LENGTH_SHORT).show();
                 }
             }
         });
