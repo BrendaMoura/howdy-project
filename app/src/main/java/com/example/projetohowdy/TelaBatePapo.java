@@ -115,7 +115,9 @@ public class TelaBatePapo extends AppCompatActivity {
                         if (doc.getType() == DocumentChange.Type.ADDED) {
                             Message message = doc.getDocument().toObject(Message.class);
                             message.setIdMessage(doc.getDocument().getId());
-                            adapter.add(new MessageItem(message));
+                            if(!(message.isDeletedByReceiver() == true && !message.getIdSender().equals(FirebaseConfiguration.getFirebaseAuth().getUid()))){
+                                adapter.add(new MessageItem(message));
+                            }
                         }
                     }
                 }
@@ -302,12 +304,12 @@ public class TelaBatePapo extends AppCompatActivity {
                             }
                             else if(menuItem.getTitle().equals("Deletar")){
 
-                                message.setContent("Essa mensagem foi apagada");
-                                message.setUpdatedAt(timestamp);
-
                                 if (message.getIdSender().equals(FirebaseConfiguration.getFirebaseAuth().getUid())) {
+                                    message.setContent("Essa mensagem foi apagada");
+                                    message.setUpdatedAt(timestamp);
                                     message.setDeletedBySender(true);
                                 } else {
+                                    message.setUpdatedAt(timestamp);
                                     message.setDeletedByReceiver(true);
                                 }
 
