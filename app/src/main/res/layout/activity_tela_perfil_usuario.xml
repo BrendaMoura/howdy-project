@@ -55,6 +55,7 @@
         android:id="@+id/perfilEmail"
         style="@style/Edit_Text"
         android:hint="Email"
+        android:maxLength="50"
         android:inputType="textEmailAddress"
         android:backgroundTint="@color/black"
         android:drawableRight="@drawable/ic_email"
