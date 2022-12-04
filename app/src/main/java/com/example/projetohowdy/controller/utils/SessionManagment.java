@@ -1,4 +1,4 @@
-package com.example.projetohowdy;
+package com.example.projetohowdy.controller.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,12 +16,18 @@ public class SessionManagment {
         editor = sharedPreferences.edit();
     }
 
-    public void saveSession(User user){
-        int id = user.getId();
-        editor.putInt(SESSION_KEY,id).commit();
+    public void startUserSession(User user){
+        String id = user.getIdUSer();
+        editor.putString(SESSION_KEY, id);
+        editor.commit();
     }
 
-    public int getSession(){
-        return -1;
+    public String getSession(){
+        return sharedPreferences.getString(SESSION_KEY, "no_user");
+    }
+
+    public  void endUserSession(){
+        editor.clear();
+        editor.commit();
     }
 }

@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +17,8 @@ import android.widget.Toast;
 import com.example.projetohowdy.controller.utils.Encryption;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.controller.utils.Session;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.example.projetohowdy.controller.utils.SessionManagment;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -101,12 +97,22 @@ public class TelaPerfilUsuario extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(TelaPerfilUsuario.this, TelaConversa.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void acao(){
         deslogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration();
                 if(firebaseConfiguration.disconnectUser()){
+                    SessionManagment sessionManagment = new SessionManagment(TelaPerfilUsuario.this);
+                    sessionManagment.endUserSession();
+
                     Toast.makeText(TelaPerfilUsuario.this, "Usuário deslogado!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(TelaPerfilUsuario.this, FormLogin.class);
                     startActivity(intent);

@@ -13,13 +13,6 @@
         android:theme="@style/Theme.ProjetoHowdy"
         tools:targetApi="31">
         <activity
-            android:name=".Image_Profile"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".TelaConversa"
             android:exported="false">
             <meta-data

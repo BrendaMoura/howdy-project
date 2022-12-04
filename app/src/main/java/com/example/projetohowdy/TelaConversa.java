@@ -3,10 +3,12 @@ package com.example.projetohowdy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.projetohowdy.controller.InboxController;
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
+import com.example.projetohowdy.controller.utils.SessionManagment;
 import com.example.projetohowdy.model.Inbox;
 import com.example.projetohowdy.model.Message;
 import com.example.projetohowdy.model.Participants;
@@ -102,6 +106,21 @@ public class TelaConversa extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Sair")
+                .setMessage("Realmente deseja sair do app?")
+                .setNegativeButton("Não", null)
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).create().show();
     }
 
     public void getInboxUsers(){

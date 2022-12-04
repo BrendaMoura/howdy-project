@@ -9,12 +9,17 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -118,7 +123,24 @@ public class TelaBatePapo extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(TelaBatePapo.this, TelaConversa.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     public void acao(){
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_OUTSIDE){
+                    System.out.println("Teste");
+                }
+                return false;
+            }
+        });
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,6 +322,12 @@ public class TelaBatePapo extends AppCompatActivity {
                                         Toast.makeText(TelaBatePapo.this, "Erro ao apagar mensagem, tente novamente!", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                            }
+                            else if(menuItem.getTitle().equals("Copiar")){
+                                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clipData = ClipData.newPlainText("MyData", message.getContent());
+                                clipboardManager.setPrimaryClip(clipData);
+                                Toast.makeText(TelaBatePapo.this, "Mensagem copiada!", Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 MessageController.setForwardMessage(message);

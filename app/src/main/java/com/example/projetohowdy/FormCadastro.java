@@ -99,6 +99,13 @@ public class FormCadastro extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(FormCadastro.this, FormLogin.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

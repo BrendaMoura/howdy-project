@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/copiar_msg"
+        android:title="Copiar" />
+    <item
         android:id="@+id/deletar_msg"
         android:title="Deletar" />
 

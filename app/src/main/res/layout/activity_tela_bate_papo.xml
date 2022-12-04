@@ -11,20 +11,25 @@
     <EditText
         android:id="@+id/mensagem"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/bg_edittext_rounded"
         android:ems="10"
         android:hint="Mensagem"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
         android:textColor="@color/black"
         android:paddingLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/enviarmensagem"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:lines="5"
+        android:minLines="1"
+        android:maxLines="15"
+        android:scrollbars="vertical"/>
 
     <Button
         android:id="@+id/enviarmensagem"

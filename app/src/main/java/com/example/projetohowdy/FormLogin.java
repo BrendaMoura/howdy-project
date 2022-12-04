@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.projetohowdy.controller.utils.FirebaseConfiguration;
 import com.example.projetohowdy.controller.utils.Session;
+import com.example.projetohowdy.controller.utils.SessionManagment;
 import com.example.projetohowdy.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +40,35 @@ public class FormLogin extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        checkSession();
+    }
+
+    private void checkSession(){
+        SessionManagment sessionManagment = new SessionManagment(FormLogin.this);
+        String userID = sessionManagment.getSession();
+
+        if(!userID.equals("no_user")){
+            FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User user = documentSnapshot.toObject(User.class);
+                    user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
+                    Session.user = user;
+
+                    SessionManagment sessionManagment = new SessionManagment(FormLogin.this);
+                    sessionManagment.startUserSession(user);
+
+                    moveToTelaConversa();
+
+                }
+            });
+        }
+    }
+
     public void acao(){
 
         entrar.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +86,12 @@ public class FormLogin extends AppCompatActivity {
                                         User user = documentSnapshot.toObject(User.class);
                                         user.setIdUSer(FirebaseConfiguration.getFirebaseAuth().getUid());
                                         Session.user = user;
-                                        Intent intent = new Intent(FormLogin.this, TelaConversa.class);
-                                        //Intent intent = new Intent(FormLogin.this, Image_Profile.class);
-                                        startActivity(intent);
-                                        finish();
+
+                                        SessionManagment sessionManagment = new SessionManagment(FormLogin.this);
+                                        sessionManagment.startUserSession(user);
+
+                                        moveToTelaConversa();
+
                                     }
                                 });
                             }else{
@@ -76,15 +108,6 @@ public class FormLogin extends AppCompatActivity {
                 }
             }
         });
-        @Override
-        protected void onStart(){
-            super.onStart();
-        }
-
-        SessionManagment sessionManagment = new SessionManagment(FormLogin.this);
-        sessionManagment.saveSession(user);
-
-        moveToMainActivity();
 
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,9 +118,9 @@ public class FormLogin extends AppCompatActivity {
         });
     }
 
-    private void moveToMainActivity() {
-        Intent intent = new Intent (FormLogin.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private void moveToTelaConversa() {
+        Intent intent = new Intent (FormLogin.this, TelaConversa.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

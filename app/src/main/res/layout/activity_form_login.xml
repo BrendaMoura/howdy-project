@@ -33,23 +33,30 @@
         android:hint="Email"
         android:textColorHint="@color/gray"
         android:inputType="textEmailAddress"
+        android:maxLength="50"
         android:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="@id/containerComponents"
         app:layout_constraintStart_toStartOf="@id/containerComponents"
         app:layout_constraintTop_toTopOf="@id/containerComponents" />
 
-    <EditText
-        android:id="@+id/perfilSenha"
-        style="@style/Edit_Text"
-        android:drawableRight="@drawable/ic_eye"
-        android:hint="Senha"
-        android:textColorHint="@color/gray"
-        android:inputType="textPassword"
-        android:backgroundTint="@color/black"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/containerComponents"
         app:layout_constraintStart_toStartOf="@id/containerComponents"
-        app:layout_constraintTop_toBottomOf="@id/perfilEmail" />
+        app:layout_constraintTop_toBottomOf="@id/perfilEmail">
 
+        <EditText
+            android:id="@+id/perfilSenha"
+            style="@style/Edit_Text"
+            android:hint="Senha"
+            android:textColorHint="@color/gray"
+            android:inputType="textPassword"
+            android:maxLength="50"
+            android:backgroundTint="@color/black"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login"

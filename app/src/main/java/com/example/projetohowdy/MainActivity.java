@@ -79,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(MainActivity.this, TelaConversa.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void acao(){
         pesquisar.setOnClickListener(new View.OnClickListener() {
             @Override
