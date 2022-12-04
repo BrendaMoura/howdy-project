@@ -40,12 +40,14 @@ public class FormLogin extends AppCompatActivity {
     }
 
     public void acao(){
+
         entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty()){
                     FirebaseConfiguration.getFirebaseAuth().signInWithEmailAndPassword(email.getText().toString(), senha.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
+
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 FirebaseConfiguration.getFirebaseFirestore().collection("Users").document(FirebaseConfiguration.getFirebaseAuth().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -74,6 +76,15 @@ public class FormLogin extends AppCompatActivity {
                 }
             }
         });
+        @Override
+        protected void onStart(){
+            super.onStart();
+        }
+
+        SessionManagment sessionManagment = new SessionManagment(FormLogin.this);
+        sessionManagment.saveSession(user);
+
+        moveToMainActivity();
 
         cadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,5 +93,11 @@ public class FormLogin extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void moveToMainActivity() {
+        Intent intent = new Intent (FormLogin.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
